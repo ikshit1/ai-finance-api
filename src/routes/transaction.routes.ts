@@ -5,6 +5,7 @@ import {
   createTransaction,
   deleteTransaction,
 } from '../controllers/transaction.controller.js';
+import { protect } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
@@ -12,6 +13,7 @@ const router = express.Router();
 // GET
 router.get(
   '/',
+  protect,
   getTransactions
 );
 
@@ -19,6 +21,7 @@ router.get(
 // POST
 router.post(
   '/',
+  protect,
   createTransaction
 );
 
@@ -26,6 +29,7 @@ router.post(
 // DELETE
 router.delete(
   '/:id',
+  protect,
   deleteTransaction
 );
 

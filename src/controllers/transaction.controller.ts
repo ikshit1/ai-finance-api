@@ -1,10 +1,10 @@
 import type { Request, Response } from 'express';
 import { Transaction } from '../models/transaction.model.js';
-
+import type { AuthRequest } from '../types/auth.types';
 
 // GET ALL TRANSACTIONS
 export const getTransactions = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ) => {
 
@@ -31,7 +31,10 @@ export const getTransactions = async (
     }
 
     const transactions =
-      await Transaction.find(filter);
+      await Transaction.find({
+        ...filter,
+        user: req.user?.userId
+      });
 
     res.status(200).json({
       success: true,
@@ -52,14 +55,14 @@ export const getTransactions = async (
 
 // CREATE TRANSACTION
 export const createTransaction = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ) => {
 
   try {
 
     const transaction = await Transaction.create(
-      req.body
+      { ...req.body, user: req.user?.userId }
     );
 
     res.status(200).json({
@@ -80,7 +83,7 @@ export const createTransaction = async (
 
 // DELETE TRANSACTION
 export const deleteTransaction = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ) => {
 
@@ -88,7 +91,7 @@ export const deleteTransaction = async (
 
     const { id } = req.params;
 
-    await Transaction.findByIdAndDelete(id);
+    await Transaction.findByIdAndDelete({ _id: id, user: req.user?.userId });
 
     res.status(200).json({
       success: true,

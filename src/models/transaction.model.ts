@@ -28,6 +28,11 @@ const transactionSchema = new mongoose.Schema(
       enum: ['Completed', 'Pending', 'Received'],
       default: 'Completed',
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
 
   {
