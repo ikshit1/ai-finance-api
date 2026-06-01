@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { Transaction } from '../models/transaction.model.js';
+import { Transaction } from '../models/transaction.model';
 import type { AuthRequest } from '../types/auth.types';
 
 // GET ALL TRANSACTIONS
