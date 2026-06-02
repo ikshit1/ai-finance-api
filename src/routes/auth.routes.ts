@@ -4,11 +4,11 @@ import {
   register,
   login,
   getMe,
-} from '../controllers/auth.controller.js';
+} from '../controllers/auth.controller';
 
 import {
   protect
-} from '../middleware/auth.middleware.js';
+} from '../middleware/auth.middleware';
 
 const router = express.Router();
 

@@ -4,8 +4,8 @@ import {
   getTransactions,
   createTransaction,
   deleteTransaction,
-} from '../controllers/transaction.controller.js';
-import { protect } from '../middleware/auth.middleware.js';
+} from '../controllers/transaction.controller';
+import { protect } from '../middleware/auth.middleware';
 
 const router = express.Router();
 
