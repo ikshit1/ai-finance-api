@@ -1,15 +1,8 @@
 import { Response } from 'express';
-
-import { Transaction }
-from '../models/transaction.model.js';
-
-import { FinancialProfile }
-from '../models/financial-profile.model.js';
-
-import type {
-  AuthRequest
-}
-from '../types/auth.types.js';
+import { Transaction } from '../models/transaction.model';
+import { FinancialProfile } from '../models/financial-profile.model';
+import type { AuthRequest } from '../types/auth.types';
+import { Debt } from '../models/debt.model';
 
 export const getAnalytics = async (
   req: AuthRequest,
@@ -26,6 +19,7 @@ export const getAnalytics = async (
         });
     }
 
+    const debts = await Debt.find({ user: userId });
     const transactions =
       await Transaction.find({
         user: userId
@@ -58,26 +52,20 @@ export const getAnalytics = async (
         user: userId
       });
 
+    const totalMonthlyEmi = debts.reduce((sum, debt) => sum + debt.emi, 0);
+
     const monthlySavings =
       income - expense;
 
     return res.json({
-
-      income,
-
-      expense,
-
-      monthlySavings,
-
-      totalSavings:
-        profile?.totalSavings || 0,
-
-      monthlyBudget:
-        profile?.monthlyBudget || 0,
-
-      monthlySalary:
-        profile?.monthlySalary || 0
-
+        income,
+        expense,
+        monthlySavings,
+        totalSavings: profile?.totalSavings || 0,
+        monthlyBudget: profile?.monthlyBudget || 0,
+        monthlySalary: profile?.monthlySalary || 0,
+        totalMonthlyEmi,
+        activeLoans: debts.length
     });
 
   } catch (error) {

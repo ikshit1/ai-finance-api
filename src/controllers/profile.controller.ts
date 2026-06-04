@@ -1,12 +1,8 @@
 import { Response } from 'express';
 
-import { FinancialProfile }
-from '../models/financial-profile.model.js';
+import { FinancialProfile } from '../models/financial-profile.model';
 
-import type {
-  AuthRequest
-}
-from '../types/auth.types.js';
+import type { AuthRequest } from '../types/auth.types';
 
 export const getProfile = async (
   req: AuthRequest,

@@ -8,6 +8,7 @@ import transactionRoutes from './routes/transaction.routes';
 import authRoutes from './routes/auth.routes';
 import analyticsRoutes from './routes/analytics.routes';
 import profileRoutes from './routes/profile.routes';
+import debtRoutes from './routes/debt.routes.js';
 
 dotenv.config();
 
@@ -62,6 +63,11 @@ app.use(
 app.use(
   '/api/profile',
   profileRoutes
+);
+
+app.use(
+  '/api/debts',
+  debtRoutes
 );
 
 const PORT = process.env.PORT || 4000;
