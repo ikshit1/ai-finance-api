@@ -1,10 +1,15 @@
-import type { Response } from 'express';
+import { Response } from 'express';
 
-import { Transaction } from '../models/transaction.model';
+import { Transaction }
+from '../models/transaction.model.js';
+
+import { FinancialProfile }
+from '../models/financial-profile.model.js';
 
 import type {
-  AuthRequest,
-} from '../types/auth.types';
+  AuthRequest
+}
+from '../types/auth.types.js';
 
 export const getAnalytics = async (
   req: AuthRequest,
@@ -16,14 +21,14 @@ export const getAnalytics = async (
     const userId = req.user?.userId;
 
     if (!userId) {
-      return res.status(401).json({
-        message: 'Unauthorized',
-      });
+        return res.status(401).json({
+        message: 'Unauthorized'
+        });
     }
 
     const transactions =
       await Transaction.find({
-        user: userId,
+        user: userId
       });
 
     const income =
@@ -48,58 +53,13 @@ export const getAnalytics = async (
           0
         );
 
-    const savings =
+    const profile =
+      await FinancialProfile.findOne({
+        user: userId
+      });
+
+    const monthlySavings =
       income - expense;
-
-    const transactionCount =
-      transactions.length;
-
-    const categoryTotals:
-      Record<string, number> = {};
-
-    transactions.forEach(t => {
-
-      if (
-        t.type === 'Expense'
-      ) {
-
-        categoryTotals[
-          t.category
-        ] =
-          (
-            categoryTotals[
-              t.category
-            ] || 0
-          ) + t.amount;
-
-      }
-
-    });
-
-    let topCategory =
-      'N/A';
-
-    let maxAmount = 0;
-
-    Object.entries(
-      categoryTotals
-    ).forEach(
-      ([category, amount]) => {
-
-        if (
-          amount > maxAmount
-        ) {
-
-          maxAmount =
-            amount;
-
-          topCategory =
-            category;
-
-        }
-
-      }
-    );
 
     return res.json({
 
@@ -107,21 +67,24 @@ export const getAnalytics = async (
 
       expense,
 
-      savings,
+      monthlySavings,
 
-      transactionCount,
+      totalSavings:
+        profile?.totalSavings || 0,
 
-      topCategory,
+      monthlyBudget:
+        profile?.monthlyBudget || 0,
+
+      monthlySalary:
+        profile?.monthlySalary || 0
 
     });
 
   } catch (error) {
 
     return res.status(500).json({
-
       message:
-        'Analytics failed'
-
+        'Failed to fetch analytics'
     });
 
   }

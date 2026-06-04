@@ -6,6 +6,8 @@ import { connectDB } from './config/db';
 
 import transactionRoutes from './routes/transaction.routes';
 import authRoutes from './routes/auth.routes';
+import analyticsRoutes from './routes/analytics.routes';
+import profileRoutes from './routes/profile.routes';
 
 dotenv.config();
 
@@ -42,8 +44,6 @@ app.use((req, res, next) => {
 app.use(cors());
 app.use(express.json());
 
-
-
 app.use(
   '/api/transactions',
   transactionRoutes
@@ -52,6 +52,16 @@ app.use(
 app.use(
   '/api/auth',
   authRoutes
+);
+
+app.use(
+  '/api/analytics',
+  analyticsRoutes
+);
+
+app.use(
+  '/api/profile',
+  profileRoutes
 );
 
 const PORT = process.env.PORT || 4000;
