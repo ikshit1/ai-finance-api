@@ -1,37 +1,68 @@
 import express from 'express';
 
 import {
+
   getTransactions,
+
   createTransaction,
-  deleteTransaction,
+
+  updateTransaction,
+
+  deleteTransaction
+
 } from '../controllers/transaction.controller';
-import { protect } from '../middleware/auth.middleware';
 
-const router = express.Router();
+import {
 
+  protect
+
+} from '../middleware/auth.middleware';
+
+const router =
+  express.Router();
 
 // GET
 router.get(
-  '/',
-  protect,
-  getTransactions
-);
 
+  '/',
+
+  protect,
+
+  getTransactions
+
+);
 
 // POST
 router.post(
+
   '/',
+
   protect,
+
   createTransaction
+
 );
 
+// PUT
+router.put(
+
+  '/:id',
+
+  protect,
+
+  updateTransaction
+
+);
 
 // DELETE
 router.delete(
-  '/:id',
-  protect,
-  deleteTransaction
-);
 
+  '/:id',
+
+  protect,
+
+  deleteTransaction
+
+);
 
 export default router;
